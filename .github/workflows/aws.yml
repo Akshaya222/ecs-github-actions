@@ -81,7 +81,7 @@ jobs:
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: nodejs-app.json
         container-name: Nodejs-Application 
