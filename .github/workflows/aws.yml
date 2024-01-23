@@ -2,33 +2,21 @@ name: Stale Pull Request
 
 on:
   schedule:
-    - cron: '* * * * *'  # Run every minute
+    - cron: '* * * * 3'  # Run every minute
 
 jobs:
   stale-reminder-16th-minute:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Stale Check (16th minute reminder)
-        uses: actions/stale@v4
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          minutes-before-stale: 2
-          minutes-before-close: 3
-
-  stale-reminder-30th-minute:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Stale Check (30th minute reminder)
-        uses: actions/stale@v4
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          minutes-before-stale: 5
-          minutes-before-close: 1
+     - name: Generate token
+       id: generate_token
+       uses: tibdex/github-app-token@v1.8.0
+       with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+          
+     - name: Checkout code
+       uses: actions/checkout@v2
+       with:
+         token: ${{ steps.generate_token.outputs.token }}
