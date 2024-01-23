@@ -2,7 +2,7 @@ name: Stale Pull Request
 
 on:
   schedule:
-    - cron: '* * * * *'  # Run every minute
+    - cron: '* * * * 3'  # Run every minute
 
 jobs:
   stale-reminder-16th-minute:
