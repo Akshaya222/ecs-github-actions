@@ -31,9 +31,9 @@ jobs:
          PR_LIST_2_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_2_AGO\") | .number")
          PR_LIST_4_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_4_AGO\") | .number")
          PR_LIST_5_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_5_AGO\") | .number")
-         echo "${PR_LIST_2_MINUTES}
-         echo "${PR_LIST_4_MINUTES}
-         echo "${PR_LIST_5_MINUTES}
+         echo "${PR_LIST_2_MINUTES}"
+         echo "${PR_LIST_4_MINUTES}"
+         echo "${PR_LIST_5_MINUTES}"
         
          
          
