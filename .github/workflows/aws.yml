@@ -25,15 +25,31 @@ jobs:
          GITHUB_OWNER="Akshaya222"
          GITHUB_REPO="ecs-github-actions"
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
-         MINUTES_2_AGO=$(date -u -d "2 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
-         MINUTES_4_AGO=$(date -u -d "4 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
-         MINUTES_5_AGO=$(date -u -d "5 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
+         MINUTES_2_AGO=$(date -u -d "10 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
+         MINUTES_4_AGO=$(date -u -d "12 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
+         MINUTES_5_AGO=$(date -u -d "15 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
          PR_LIST_2_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_2_AGO\") | .number")
          PR_LIST_4_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_4_AGO\") | .number")
          PR_LIST_5_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_5_AGO\") | .number")
-         echo "${PR_LIST_2_MINUTES}"
-         echo "${PR_LIST_4_MINUTES}"
-         echo "${PR_LIST_5_MINUTES}"
+         for PR_NUMBER in $PR_LIST_2_MINUTES; do
+         COMMENT=":rotating_light: **Reminder**: This pull request will be closed in 16 minutes if there's no further activity. Please review and provide any necessary updates. :rotating_light:"
+         curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER/comments"
+         done
+         for PR_NUMBER in $PR_LIST_4_MINUTES; do
+         COMMENT=":rotating_light: **Reminder**: This pull request will be closed tomorrow if there's no further activity. Please review and provide any necessary updates. :rotating_light:"
+         curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER/comments"
+         done
+         for PR_NUMBER in $PR_LIST_4_MINUTES; do
+         COMMENT=":rotating_light: **Reminder**: This pull request will be closed tomorrow if there's no further activity. Please review and provide any necessary updates. :rotating_light:"
+         curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER/comments"
+         done
+         for PR_NUMBER in $PR_LIST_5_MINUTES; do
+         COMMENT=":rotating_light: **Closing**: This pull request has been inactive for more than 31 minutes and will be closed. Feel free to reopen if needed. :rotating_light:"
+         curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER"
+         done
+
+         
+         
         
          
          
