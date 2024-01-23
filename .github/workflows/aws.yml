@@ -1,9 +1,8 @@
 name: Stale Pull Request
 
 on:
-  schedule:
-    - cron: '*/2 * * * *'  # Run every minute
-
+  workflow_dispatch: 
+  
 jobs:
   stale-reminder-16th-minute:
     runs-on: ubuntu-latest
