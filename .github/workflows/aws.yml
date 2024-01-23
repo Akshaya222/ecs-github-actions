@@ -20,3 +20,11 @@ jobs:
        uses: actions/checkout@v2
        with:
          token: ${{ steps.generate_token.outputs.token }}
+         
+     - name: Bash Script
+       run: |
+         GITHUB_OWNER="Akshaya222"
+         GITHUB_REPO="ecs-github-actions"
+         ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
+         echo "${GITHUB_OWNER}"
+
