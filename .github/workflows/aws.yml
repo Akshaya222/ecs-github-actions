@@ -26,12 +26,12 @@ jobs:
          GITHUB_OWNER="Akshaya222"
          GITHUB_REPO="ecs-github-actions"
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
-         MINUTES_5_AGO=$(date -u -d "5 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
-         MINUTES_10_AGO=$(date -u -d "10 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
-         MINUTES_15_AGO=$(date -u -d "15 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
-         PR_LIST_5_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_5_AGO\") | .number")
-         PR_LIST_10_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_10_AGO\") | .number")
-         PR_LIST_15_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_15_AGO\") | .number")
+         MINUTES_5_AGO=$(date -u -d "5 minutes ago" +%Y-%m-%dT%H:%M:%S)
+         MINUTES_10_AGO=$(date -u -d "10 minutes ago" +%Y-%m-%dT%H:%M:%S)
+         MINUTES_15_AGO=$(date -u -d "15 minutes ago" +%Y-%m-%dT%H:%M:%S)
+         PR_LIST_5_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at == \"$MINUTES_5_AGO\") | .number")
+         PR_LIST_10_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at == \"$MINUTES_10_AGO\") | .number")
+         PR_LIST_15_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at == \"$MINUTES_15_AGO\") | .number")
          for PR_NUMBER_1 in $PR_LIST_5_MINUTES; do
          COMMENT="Reminder**: This pull request will be closed in 10 minutes if there's no further activity. Please review and provide any necessary updates."
          curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_1/comments"
