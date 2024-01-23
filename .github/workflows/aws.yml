@@ -1,8 +1,7 @@
 name: Stale Pull Request
 
 on:
-  schedule:
-    - cron: '* * * * *' 
+  workflow_dispatch:
   
 jobs:
   stale-reminder-16th-minute:
