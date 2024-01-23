@@ -25,9 +25,9 @@ jobs:
          GITHUB_OWNER="Akshaya222"
          GITHUB_REPO="ecs-github-actions"
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
-         MINUTES_25_AGO=$(date -u -d "25 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
-         MINUTES_30_AGO=$(date -u -d "30 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
-         MINUTES_35_AGO=$(date -u -d "35 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
+         MINUTES_25_AGO=$(date -u -d "35 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
+         MINUTES_30_AGO=$(date -u -d "40 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
+         MINUTES_35_AGO=$(date -u -d "45 minutes ago" +%Y-%m-%dT%H:%M:%SZ)
          PR_LIST_25_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_25_AGO\") | .number")
          PR_LIST_30_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_30_AGO\") | .number")
          PR_LIST_35_MINUTES=$(curl -s -H "Authorization: token ${ACCESS_TOKEN}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at < \"$MINUTES_35_AGO\") | .number")
