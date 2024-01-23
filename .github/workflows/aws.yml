@@ -25,5 +25,5 @@ jobs:
          GITHUB_OWNER="Akshaya222"
          GITHUB_REPO="ecs-github-actions"
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
-         echo "${ACCESS_TOKEN}"
+         echo "${{ steps.generate_token.outputs.token }}"
 
