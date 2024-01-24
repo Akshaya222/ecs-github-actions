@@ -64,6 +64,6 @@ jobs:
             pushed_at=$(echo "$pr_decoded" | jq -r '.head.repo.pushed_at')
             echo "Pull Request #$pr_number - Pushed at: $pushed_at"
           done
-          for pull_req in $PR_LIST; do
+          for pull_req in "${PR_LIST[@]}"; do
             echo "pr is -----------$pull_req"
           done
