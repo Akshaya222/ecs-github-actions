@@ -57,11 +57,12 @@ jobs:
            curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER_9"
          done
 
-         echo "*********************"
-         CURRENT_TIME=$(date -u +"%Y-%m-%dT%H:%M")
-         echo "current time is ${CURRENT_TIME}"
-         echo "Pr is ${PR_LIST}"
-         for PR in $PR_LIST; do
-           PUSHED_AT=$(echo "$PR_DETAILS" | jq -r '.pushed_at')
-           echo "Pushed at time is ${PUSHED_AT}"
-         done
+          echo "*********************"
+          CURRENT_TIME=$(date -u +"%Y-%m-%dT%H:%M")
+          echo "current time is ${CURRENT_TIME}"
+          echo "Pr is ${PR_LIST}"
+          echo "pr list array length is ${#PR_LIST[@]}"
+          for PR in $PR_LIST; do
+            PUSHED_AT=$(echo "$PR" | jq -r '.pushed_at')
+            echo "Pushed at time is ${PUSHED_AT}"
+          done
