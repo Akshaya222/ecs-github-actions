@@ -30,30 +30,30 @@ jobs:
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc")
          echo "pr list --- ${#PR_LIST[@]}"
          for pull_req in "${PR_LIST[@]}"; do
-           echo "pull_req is *******"
-           # Filter pull requests pushed to 3, 6, and 9 minutes ago
-           PR_LIST_2_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
-           PR_LIST_4_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
-           PR_LIST_6_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '6 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
-           echo "pr list pushed 2 minutes ago - ${PR_LIST_2_MINUTES}"
-           echo "pr list pushed 4 minutes ago - ${PR_LIST_4_MINUTES}"
-           echo "pr list pushed 6 minutes ago - ${PR_LIST_6_MINUTES}"
-           # Loop through the list of pull requests and add comments or close them
-           for PR_NUMBER_2 in $PR_LIST_2_MINUTES; do
-             COMMENT=":rotating_light: **Reminder**: This pull request (#$PR_NUMBER_2) will be closed in 4 minutes if there's no further activity. Please review and provide any necessary updates. :rotating_light:"
-             curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_2/comments"
-           done
+            echo "pull_req is ${pull_req}"
+         #   # Filter pull requests pushed to 3, 6, and 9 minutes ago
+         #   PR_LIST_2_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
+         #   PR_LIST_4_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
+         #   PR_LIST_6_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '6 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
+         #   echo "pr list pushed 2 minutes ago - ${PR_LIST_2_MINUTES}"
+         #   echo "pr list pushed 4 minutes ago - ${PR_LIST_4_MINUTES}"
+         #   echo "pr list pushed 6 minutes ago - ${PR_LIST_6_MINUTES}"
+         #   # Loop through the list of pull requests and add comments or close them
+         #   for PR_NUMBER_2 in $PR_LIST_2_MINUTES; do
+         #     COMMENT=":rotating_light: **Reminder**: This pull request (#$PR_NUMBER_2) will be closed in 4 minutes if there's no further activity. Please review and provide any necessary updates. :rotating_light:"
+         #     curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_2/comments"
+         #   done
 
-           for PR_NUMBER_4 in $PR_LIST_4_MINUTES; do
-             COMMENT=":rotating_light: **Reminder**: This pull request (#$PR_NUMBER_4) will be closed in 2 minutes if there's no further activity. Please review and provide any necessary updates. :rotating_light:"
-             curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_4/comments"
-           done
+         #   for PR_NUMBER_4 in $PR_LIST_4_MINUTES; do
+         #     COMMENT=":rotating_light: **Reminder**: This pull request (#$PR_NUMBER_4) will be closed in 2 minutes if there's no further activity. Please review and provide any necessary updates. :rotating_light:"
+         #     curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_4/comments"
+         #   done
 
-           for PR_NUMBER_6 in $PR_LIST_6_MINUTES; do
-             COMMENT=":rotating_light: **Closing**: Closing this pull request (#$PR_NUMBER_6) as it was inactive for more than 6 minutes. Feel free to reopen if needed. :rotating_light:"
-             curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_6/comments"
-             curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER_6"
-           done
+         #   for PR_NUMBER_6 in $PR_LIST_6_MINUTES; do
+         #     COMMENT=":rotating_light: **Closing**: Closing this pull request (#$PR_NUMBER_6) as it was inactive for more than 6 minutes. Feel free to reopen if needed. :rotating_light:"
+         #     curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_6/comments"
+         #     curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER_6"
+         #   done
          done
  
 
