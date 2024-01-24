@@ -29,8 +29,6 @@ jobs:
       
          # Fetch open pull requests
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc")
-
-         for PR in $(echo "$PR_LIST" | jq -r '.[] | @base64'); do
            # Filter pull requests pushed to 3, 6, and 9 minutes ago
            PR_LIST_2_MINUTES=$(echo "$PR" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
            PR_LIST_4_MINUTES=$(echo "$PR" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
@@ -54,7 +52,7 @@ jobs:
              curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_6/comments"
              curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER_6"
            done
-          done
+ 
 
           echo "*********************"
           CURRENT_TIME=$(date -u +"%Y-%m-%dT%H:%M")
