@@ -54,6 +54,17 @@ jobs:
          curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER_3"
          done
 
+         # Fetch open pull requests
+         PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc")
+
+         # Loop through each pull request and pretty-print all fields
+         echo "----------------------------------------"
+         for PR in $(echo "$PR_LIST" | jq -c '.[]'); do
+         echo "Pull Request:"
+         echo "$PR" | jq .
+         echo "----------------------------------------"
+         done
+
          
          
         
