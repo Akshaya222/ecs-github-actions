@@ -28,6 +28,7 @@ jobs:
          BOT_USERNAME="Bot"
          # Fetch open pull requests
          curl_response=$(curl -s -H \"Authorization: token $ACCESS_TOKEN\" \"https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc\")
+         echo $curl_response
          jq -c '.[]' <<<"${curl_response}" | while read -r element; do
            echo "PR living - $element"
          done
