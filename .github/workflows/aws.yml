@@ -61,3 +61,7 @@ jobs:
          CURRENT_TIME=$(date -u +"%Y-%m-%dT%H:%M")
          echo "current time is ${CURRENT_TIME}"
          echo "Pr is ${PR_LIST}"
+         for PR in $PR_LIST; do
+           PUSHED_AT=$(echo "$PR_DETAILS" | jq -r '.pushed_at')
+           echo "Pushed at time is ${PUSHED_AT}"
+         done
