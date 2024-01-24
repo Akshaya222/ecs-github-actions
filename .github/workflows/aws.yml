@@ -31,11 +31,11 @@ jobs:
          echo "curl response - ${PR_LIST}"
          jq -c '.[]' <<<"${PR_LIST}" | while read -r element; do
            pull_req=${element}
-           echo "pull request is ********** ${pull_req.head}"
+           # echo "pull request is ********** ${pull_req.head}"
            # Filter pull requests pushed to 3, 6, and 9 minutes ago
-           PR_LIST_2_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
-           PR_LIST_4_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
-           PR_LIST_6_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '6 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
+           PR_LIST_2_MINUTES=$(echo "$pull_req" | jq -r ".{} | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
+           PR_LIST_4_MINUTES=$(echo "$pull_req" | jq -r ".{} | select(.head.repo.pushed_at | startswith(\"$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
+           PR_LIST_6_MINUTES=$(echo "$pull_req" | jq -r ".{} | select(.head.repo.pushed_at | startswith(\"$(date -u -d '6 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
            echo "pr list pushed 2 minutes ago - ${PR_LIST_2_MINUTES}"
            echo "pr list pushed 4 minutes ago - ${PR_LIST_4_MINUTES}"
            echo "pr list pushed 6 minutes ago - ${PR_LIST_6_MINUTES}"
