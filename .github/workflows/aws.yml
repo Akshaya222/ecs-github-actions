@@ -63,12 +63,9 @@ jobs:
            exit 0
          fi
 
-         # Loop through each pull request and pretty-print all fields
-         for PR in $(echo "$PR_LIST" | jq -c '.[]'); do
-           echo "----------------------------------------"
-           echo "Pull Request:"
-           echo "$PR" | jq .
-           echo "----------------------------------------"
-         done
-         
+         while read -r PR; do
+          echo "Pull Request:"
+          echo "$PR" | jq . || { echo "Failed to parse JSON data. Exiting..."; exit 1; }
+          echo "----------------------------------------"
+         done <<< "$PR_LIST"
          
