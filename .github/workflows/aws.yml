@@ -34,27 +34,31 @@ jobs:
          echo "10 minutes ago - ${MINUTES_10_AGO}"
          echo "15 minutes ago - ${MINUTES_15_AGO}"
          echo "current time - ${CURRENT_TIME}"
-         PR_LIST_5_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.pushed_at | startswith(\"$MINUTES_5_AGO\")) | .number, .user.type" | grep -B1 -E -v "$BOT_USERNAME" | grep -E "$" | tr '\n' ' ')
-         PR_LIST_10_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.pushed_at | startswith(\"$MINUTES_10_AGO\")) | .number, .user.type" | grep -B1 -E -v "$BOT_USERNAME" | grep -E "$" | tr '\n' ' ')
-         PR_LIST_15_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.pushed_at | startswith(\"$MINUTES_15_AGO\")) | .number, .user.type" | grep -B1 -E -v "$BOT_USERNAME" | grep -E "$" | tr '\n' ' ')
-         echo "pr list in 5 minutes - ${PR_LIST_5_MINUTES}"
-         echo "pr list in 10 minutes - ${PR_LIST_10_MINUTES}"
-         echo "pr list in 15 minutes - ${PR_LIST_15_MINUTES}"
-         for PR_NUMBER_1 in $PR_LIST_5_MINUTES; do
-         COMMENT="Reminder**: This pull request will be closed in 6 minutes if there's no further activity. Please review and provide any necessary updates."
-         curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_1/comments"
-         done
-         for PR_NUMBER_2 in $PR_LIST_10_MINUTES; do
-         COMMENT="Reminder**: This pull request will be closed in 3 minutes if there's no further activity. Please review and provide any necessary updates."
-         curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_2/comments"
-         done
-         for PR_NUMBER_3 in $PR_LIST_15_MINUTES; do
-         COMMENT=" Closing**: closing this pr as it was inactive for more than 9 minutes. Feel free to reopen if needed."
-         curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_3/comments"
-         curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER_3"
+         # Fetch open pull requests
+         PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc")
+
+         # Filter pull requests pushed to 3, 6, and 9 minutes ago
+         PR_LIST_3_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.pushed_at | contains(\"$MINUTES_3_AGO\")) | .number)
+         PR_LIST_6_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.pushed_at | contains(\"$MINUTES_6_AGO\")) | .number)
+         PR_LIST_9_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.pushed_at | contains(\"$MINUTES_9_AGO\")) | .number)
+
+         echo "pr list pushed 3 minutes ago - ${PR_LIST_3_MINUTES}"
+         echo "pr list pushed 6 minutes ago - ${PR_LIST_6_MINUTES}"
+         echo "pr list pushed 9 minutes ago - ${PR_LIST_9_MINUTES}"
+
+         # Loop through the list of pull requests and add comments or close them
+         for PR_NUMBER_3 in $PR_LIST_3_MINUTES; do
+          COMMENT=":rotating_light: **Reminder**: This pull request (#$PR_NUMBER_3) will be closed in 6 minutes if there's no further activity. Please review and provide any necessary updates. :rotating_light:"
+          curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_3/comments"
          done
 
-         # Fetch open pull requests
-         PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc")
-         echo "*****************************"
-         echo "pr list is ${PR_LIST}"
+         for PR_NUMBER_6 in $PR_LIST_6_MINUTES; do
+           COMMENT=":rotating_light: **Reminder**: This pull request (#$PR_NUMBER_6) will be closed in 3 minutes if there's no further activity. Please review and provide any necessary updates. :rotating_light:"
+           curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_6/comments"
+         done
+
+         for PR_NUMBER_9 in $PR_LIST_9_MINUTES; do
+           COMMENT=":rotating_light: **Closing**: Closing this pull request (#$PR_NUMBER_9) as it was inactive for more than 9 minutes. Feel free to reopen if needed. :rotating_light:"
+           curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_9/comments"
+           curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER_9"
+         done
