@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   
 jobs:
-  stale-reminder-16th-minute:
+  stale-pr-reminder:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,9 +28,10 @@ jobs:
          MINUTES_5_AGO=$(date -u -d "5 minutes ago" +%Y-%m-%dT%H:%M)
          MINUTES_10_AGO=$(date -u -d "10 minutes ago" +%Y-%m-%dT%H:%M)
          MINUTES_15_AGO=$(date -u -d "15 minutes ago" +%Y-%m-%dT%H:%M)
-         echo "minutes 5 ago is - ${MINUTES_5_AGO}"
-         echo "minutes 10 ago is - ${MINUTES_10_AGO}"
-         echo "minutes 15 ago is - ${MINUTES_15_AGO}"
+         START_RANGE=$(date -u -d "15 minutes ago" --date="@$(date -u -d '15 minutes ago' +%s)" +%Y-%m-%dT%H:%M)
+         END_RANGE=$(date -u -d "14 minutes ago" --date="@$(date -u -d '15 minutes ago' +%s)" +%Y-%m-%dT%H:%M)
+         echo "start range is - ${START_RANGE}"
+         echo "end range is - ${END_RANGE}"
          PR_LIST_5_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at | startswith(\"$MINUTES_5_AGO\")) | .number")
          PR_LIST_10_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at | startswith(\"$MINUTES_10_AGO\")) | .number")
          PR_LIST_15_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at | startswith(\"$MINUTES_15_AGO\")) | .number")
