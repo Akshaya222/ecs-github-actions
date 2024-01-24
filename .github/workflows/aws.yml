@@ -28,6 +28,7 @@ jobs:
       
          # to fetch open pull requests
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc")
+         echo "pr list is ${PR_LIST}"
 
          # to filter pull requests which had code push 2, 4 and 6 minutes ago
          PR_LIST_2_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
