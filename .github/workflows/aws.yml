@@ -27,10 +27,12 @@ jobs:
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
          BOT_USERNAME="Bot"
          # Fetch open pull requests
-         PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc" | jq .[])
-         echo "pr list --- ${#PR_LIST[@]}"
-         for pull_req in "${PR_LIST[@]}"; do
-            echo "pull_req is ${pull_req}"
+         jq -c '.[]' <<<"$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc") | while read -r element; do)
+           echo "PR living - $element"
+         done
+         # echo "pr list --- ${#PR_LIST[@]}"
+         # for pull_req in "${PR_LIST[@]}"; do
+         #    echo "pull_req is ${pull_req}"
          #   # Filter pull requests pushed to 3, 6, and 9 minutes ago
          #   PR_LIST_2_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
          #   PR_LIST_4_MINUTES=$(echo "$pull_req" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
@@ -54,7 +56,7 @@ jobs:
          #     curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_6/comments"
          #     curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER_6"
          #   done
-         done
+         # done
  
 
          
