@@ -31,9 +31,9 @@ jobs:
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc")
 
          # Filter pull requests pushed to 3, 6, and 9 minutes ago
-         PR_LIST_3_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.updated_at | startswith(\"$(date -u -d '3 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
-         PR_LIST_6_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.updated_at | startswith(\"$(date -u -d '6 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
-         PR_LIST_9_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.updated_at | startswith(\"$(date -u -d '9 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
+         PR_LIST_3_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
+         PR_LIST_6_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
+         PR_LIST_9_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '6 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
 
 
          echo "pr list pushed 3 minutes ago - ${PR_LIST_3_MINUTES}"
