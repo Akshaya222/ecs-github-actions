@@ -28,10 +28,9 @@ jobs:
          BOT_USERNAME="Bot"
          # Fetch open pull requests
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc")
-         echo "curl response - ${PR_LIST}"
          jq -c '.[]' <<<"${PR_LIST}" | while read -r element; do
            pull_req=${element}
-           # echo "pull request is ********** ${pull_req.head}"
+           echo "pull request is ********** ${pull_req}"
            # Filter pull requests pushed to 3, 6, and 9 minutes ago
            PR_LIST_2_MINUTES=$(echo "$pull_req" | jq -r ".{} | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
            PR_LIST_4_MINUTES=$(echo "$pull_req" | jq -r ".{} | select(.head.repo.pushed_at | startswith(\"$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
