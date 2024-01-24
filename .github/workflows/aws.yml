@@ -30,7 +30,9 @@ jobs:
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc")
          jq -c '.[]' <<<"${PR_LIST}" | while read -r element; do
            pull_req=${element}
-           echo "pull request is ********** ${pull_req}"
+           pr_number=$(echo "${element}" | jq -r '.number')
+           pushed_at=$(echo "${element}" | jq -r '.head.repo.pushed_at')
+           echo "pr_number is ${pr_number} and pushed_at is ${pushed_at}"
            # Filter pull requests pushed to 3, 6, and 9 minutes ago
            PR_LIST_2_MINUTES=$(echo "$pull_req" | jq -r ".{} | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
            PR_LIST_4_MINUTES=$(echo "$pull_req" | jq -r ".{} | select(.head.repo.pushed_at | startswith(\"$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
