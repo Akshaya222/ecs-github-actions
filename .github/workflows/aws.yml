@@ -62,7 +62,9 @@ jobs:
           echo "current time is ${CURRENT_TIME}"
           echo "Pr is ${PR_LIST}"
           echo "pr list array length is ${#PR_LIST[@]}"
-          for PR in $PR_LIST; do
-            PUSHED_AT=$(echo "$PR" | jq -r '.pushed_at')
-            echo "Pushed at time is ${PUSHED_AT}"
+          for pr in $(echo "$PR_LIST" | jq -r '.[] | @base64'); do
+            pr_decoded=$(echo "$pr" | base64 --decode)
+            pr_number=$(echo "$pr_decoded" | jq -r '.number')
+            pushed_at=$(echo "$pr_decoded" | jq -r '.pushed_at')
+            echo "Pull Request #$pr_number - Pushed at: $pushed_at"
           done
