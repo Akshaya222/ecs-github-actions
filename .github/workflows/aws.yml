@@ -35,6 +35,7 @@ jobs:
            pr_number=$(echo "${element}" | jq -r '.number')
            pushed_at=$(echo "${element}" | jq -r '.head.repo.pushed_at')
            echo "pr_number is ${pr_number} and pushed_at is ${pushed_at}"
+           echo "pull request is ${pull_req}"
            # Filter pull requests pushed to 3, 6, and 9 minutes ago
            [[ "${pushed_at}" = "$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_2_MINUTES="${pr_number}"
            [[ "${pushed_at}" = "$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_4_MINUTES="${pr_number}"
