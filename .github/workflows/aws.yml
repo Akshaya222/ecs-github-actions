@@ -57,16 +57,18 @@ jobs:
          # Fetch open pull requests
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc")
 
-         # Loop through each pull request and pretty-print all fields
-         echo "----------------------------------------"
-         for PR in $(echo "$PR_LIST" | jq -c '.[]'); do
-         echo "Pull Request:"
-         echo "$PR" | jq .
-         echo "----------------------------------------"
-         done
+         # Check if there are any pull requests
+         if [ -z "$PR_LIST" ]; then
+           echo "No open pull requests found."
+           exit 0
+         fi
 
-         
-         
-        
+         # Loop through each pull request and pretty-print all fields
+         for PR in $(echo "$PR_LIST" | jq -c '.[]'); do
+           echo "----------------------------------------"
+           echo "Pull Request:"
+           echo "$PR" | jq .
+           echo "----------------------------------------"
+         done
          
          
