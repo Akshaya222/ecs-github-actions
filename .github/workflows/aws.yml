@@ -62,5 +62,8 @@ jobs:
             pr_decoded=$(echo "$pr" | base64 --decode)
             pr_number=$(echo "$pr_decoded" | jq -r '.number')
             pushed_at=$(echo "$pr_decoded" | jq -r '.head.repo.pushed_at')
-            echo "Pull Request #$pr_number - Pushed at: $pushed_at, pr is ---- $pr"
+            echo "Pull Request #$pr_number - Pushed at: $pushed_at"
+          done
+          for pull_req in $(echo "$PR_LIST"); do
+            echo "pr is -----------$pull_req"
           done
