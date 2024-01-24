@@ -30,6 +30,7 @@ jobs:
          echo "current time is ${CURRENT_TIME}"
          # Fetch open pull requests
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc")
+         echo "pr list is +++++++++++++++ ${PR_LIST}"
          jq -c '.[]' <<<"${PR_LIST}" | while read -r element; do
            pull_req=${element}
            echo "pull request is ${pull_req}"
