@@ -27,7 +27,7 @@ jobs:
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
          BOT_USERNAME="Bot"
          # Fetch open pull requests
-         PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc")
+         PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=pushed_at&direction=asc" | jq .[])
          echo "pr list --- ${#PR_LIST[@]}"
          for pull_req in "${PR_LIST[@]}"; do
             echo "pull_req is ${pull_req}"
