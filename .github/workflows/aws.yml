@@ -65,6 +65,6 @@ jobs:
           for pr in $(echo "$PR_LIST" | jq -r '.[] | @base64'); do
             pr_decoded=$(echo "$pr" | base64 --decode)
             pr_number=$(echo "$pr_decoded" | jq -r '.number')
-            pushed_at=$(echo "$pr_decoded" | jq -r '.head.repo')
+            pushed_at=$(echo "$pr_decoded" | jq -r '.head.repo.pushed_at')
             echo "Pull Request #$pr_number - Pushed at: $pushed_at"
           done
