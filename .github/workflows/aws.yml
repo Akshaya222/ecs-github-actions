@@ -34,9 +34,9 @@ jobs:
          echo "10 minutes ago - ${MINUTES_10_AGO}"
          echo "15 minutes ago - ${MINUTES_15_AGO}"
          echo "current time - ${CURRENT_TIME}"
-         PR_LIST_5_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at | startswith(\"$MINUTES_5_AGO\")) | .number, .user.type" | grep -B1 -E -v "$BOT_USERNAME" | grep -E "$" | tr '\n' ' ')
-         PR_LIST_10_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at | startswith(\"$MINUTES_10_AGO\")) | .number, .user.type" | grep -B1 -E -v "$BOT_USERNAME" | grep -E "$" | tr '\n' ' ')
-         PR_LIST_15_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.updated_at | startswith(\"$MINUTES_15_AGO\")) | .number, .user.type" | grep -B1 -E -v "$BOT_USERNAME" | grep -E "$" | tr '\n' ' ')
+         PR_LIST_5_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.pushed_at | startswith(\"$MINUTES_5_AGO\")) | .number, .user.type" | grep -B1 -E -v "$BOT_USERNAME" | grep -E "$" | tr '\n' ' ')
+         PR_LIST_10_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.pushed_at | startswith(\"$MINUTES_10_AGO\")) | .number, .user.type" | grep -B1 -E -v "$BOT_USERNAME" | grep -E "$" | tr '\n' ' ')
+         PR_LIST_15_MINUTES=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&sort=updated&direction=asc" | jq -r ".[] | select(.pushed_at | startswith(\"$MINUTES_15_AGO\")) | .number, .user.type" | grep -B1 -E -v "$BOT_USERNAME" | grep -E "$" | tr '\n' ' ')
          echo "pr list in 5 minutes - ${PR_LIST_5_MINUTES}"
          echo "pr list in 10 minutes - ${PR_LIST_10_MINUTES}"
          echo "pr list in 15 minutes - ${PR_LIST_15_MINUTES}"
