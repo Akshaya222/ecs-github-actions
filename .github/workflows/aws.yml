@@ -46,6 +46,9 @@ jobs:
            echo "4 minutes ${PR_LIST_4_MINUTES}"
            echo "6 minutes ${PR_LIST_6_MINUTES}"
          done
+         echo "2 minutes ${PR_LIST_2_MINUTES}"
+         echo "4 minutes ${PR_LIST_4_MINUTES}"
+         echo "6 minutes ${PR_LIST_6_MINUTES}"
          for PR_NUMBER_1 in $PR_LIST_2_MINUTES; do
             COMMENT="Reminder**: This pull request will be closed in 4 minutes if there's no further activity. Please review and provide any necessary updates."
             curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_1/comments"
