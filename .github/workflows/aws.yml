@@ -30,5 +30,9 @@ jobs:
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&direction=asc")
            echo "$PR_LIST" | jq -c '.[]' | while read -r pull_req; do
            PR_NUMBER=$(echo "$pull_req" | jq -r '.number')
-           echo "Pull request number is: $PR_NUMBER"
+           API_URL="https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/${PR_NUMBER}/commits"
+           API_RESPONSE=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "$API_URL")
+           SORTED_COMMITS=$(echo "$API_RESPONSE" | jq -c 'sort_by(.commit.author.date) | reverse')
+           LATEST_COMMIT_MESSAGE=$(echo "$SORTED_COMMITS" | jq -r '.[0].commit.author.date')
+           echo "pull request number is ${PR_NUMBER} and ${LATEST_COMMIT_MESSAGE}
          done
