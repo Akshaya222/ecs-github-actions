@@ -36,10 +36,10 @@ jobs:
          API_RESPONSE=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "$API_URL")
 
           # Extract the timestamp from the latest commit
-         LATEST_COMMIT_TIMESTAMP=$(echo "$API_RESPONSE" | jq -r '.[0].commit.author.date')
+         
 
           # Print the timestamp
-         echo "Timestamp of the latest commit in Pull Request $LATEST_COMMIT_TIMESTAMP"
+         echo "Timestamp of the latest commit in Pull Request $API_RESPONSE"
 
          # to filter pull requests which had code push 2, 4 and 6 minutes ago
          # PR_LIST_2_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
