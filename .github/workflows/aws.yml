@@ -33,10 +33,10 @@ jobs:
          API_URL="https://api.github.com/repos/Akshaya222/ecs-github-actions/pulls/8/commits"
 
          # Make the API request using curl
-         COMMIT_DETAILS=$(curl -s -H "Accept: application/vnd.github.v3+json" "$API_URL")
+         API_RESPONSE=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "$API_URL")
 
           # Extract the timestamp from the latest commit
-         LATEST_COMMIT_TIMESTAMP=$(echo "$COMMIT_DETAILS" | jq -r '.[0].commit.author.date')
+         LATEST_COMMIT_TIMESTAMP=$(echo "$API_RESPONSE" | jq -r '.[0].commit.author.date')
 
           # Print the timestamp
          echo "Timestamp of the latest commit in Pull Request $LATEST_COMMIT_TIMESTAMP"
