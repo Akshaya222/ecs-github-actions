@@ -39,7 +39,7 @@ jobs:
          LATEST_COMMIT_TIMESTAMP=$(echo "$COMMIT_DETAILS" | jq -r '.[0].commit.author.date')
 
           # Print the timestamp
-         echo "Timestamp of the latest commit in Pull Request #$PULL_REQUEST_NUMBER: $LATEST_COMMIT_TIMESTAMP"
+         echo "Timestamp of the latest commit in Pull Request $LATEST_COMMIT_TIMESTAMP"
 
          # to filter pull requests which had code push 2, 4 and 6 minutes ago
          PR_LIST_2_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
