@@ -34,5 +34,5 @@ jobs:
            API_RESPONSE=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "$API_URL")
            SORTED_COMMITS=$(echo "$API_RESPONSE" | jq -c 'sort_by(.commit.author.date) | reverse')
            LATEST_COMMIT_MESSAGE=$(echo "$SORTED_COMMITS" | jq -r '.[0].commit.author.date')
-           echo "pull request number is ${PR_NUMBER} and ${LATEST_COMMIT_MESSAGE}
+           echo "pull request number is ${PR_NUMBER} and ${LATEST_COMMIT_MESSAGE}"
          done
