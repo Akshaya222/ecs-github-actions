@@ -30,6 +30,17 @@ jobs:
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&direction=asc")
          echo "pr list is ${PR_LIST}"
 
+         API_URL="https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/9/commits"
+
+         # Make the API request using curl
+         COMMIT_DETAILS=$(curl -s -H "Accept: application/vnd.github.v3+json" "$API_URL")
+
+          # Extract the timestamp from the latest commit
+         LATEST_COMMIT_TIMESTAMP=$(echo "$COMMIT_DETAILS" | jq -r '.[0].commit.author.date')
+
+          # Print the timestamp
+         echo "Timestamp of the latest commit in Pull Request #$PULL_REQUEST_NUMBER: $LATEST_COMMIT_TIMESTAMP"
+
          # to filter pull requests which had code push 2, 4 and 6 minutes ago
          PR_LIST_2_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
          PR_LIST_4_MINUTES=$(echo "$PR_LIST" | jq -r ".[] | select(.head.repo.pushed_at | startswith(\"$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)\")) | .number")
