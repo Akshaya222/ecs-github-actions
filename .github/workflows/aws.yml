@@ -25,9 +25,6 @@ jobs:
          GITHUB_OWNER="Akshaya222"
          GITHUB_REPO="ecs-github-actions"
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
-         PR_LIST_2_MINUTES=
-         PR_LIST_4_MINUTES=
-         PR_LIST_6_MINUTES=
          # to fetch open pull requests
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&direction=asc")
            echo "$PR_LIST" | jq -c '.[]' | while read -r pull_req; do
