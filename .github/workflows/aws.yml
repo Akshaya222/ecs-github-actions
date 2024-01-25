@@ -25,9 +25,9 @@ jobs:
          GITHUB_OWNER="Akshaya222"
          GITHUB_REPO="ecs-github-actions"
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
-         PR_LIST_2_MINUTES=
-         PR_LIST_4_MINUTES=
-         PR_LIST_6_MINUTES=
+         PR_LIST_2_MINUTES=()
+         PR_LIST_4_MINUTES=()
+         PR_LIST_6_MINUTES=()
          current_time=$(date +"%Y-%m-%d %H:%M:%S")
          echo "Current Time: $current_time"
          # to fetch open pull requests
@@ -39,16 +39,16 @@ jobs:
            SORTED_COMMITS=$(echo "$API_RESPONSE" | jq -c 'sort_by(.commit.author.date) | reverse')
            LATEST_COMMIT_MESSAGE=$(echo "$SORTED_COMMITS" | jq -r '.[0].commit.author.date')
            echo "pull request number is ${PR_NUMBER} and ${LATEST_COMMIT_MESSAGE}"
-           [[ "${LATEST_COMMIT_MESSAGE}" = "$(date -u -d '2 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_2_MINUTES="${PR_NUMBER}"
-           [[ "${LATEST_COMMIT_MESSAGE}" = "$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_4_MINUTES="${PR_NUMBER}"
-           [[ "${LATEST_COMMIT_MESSAGE}" = "$(date -u -d '6 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_6_MINUTES="${PR_NUMBER}"
-           echo "2 minutes ${PR_LIST_2_MINUTES}"
-           echo "4 minutes ${PR_LIST_4_MINUTES}"
-           echo "6 minutes ${PR_LIST_6_MINUTES}"
+           [[ "${LATEST_COMMIT_MESSAGE}" = "$(date -u -d '12 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_2_MINUTES+=("${PR_NUMBER}")"
+           [[ "${LATEST_COMMIT_MESSAGE}" = "$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_4_MINUTES+=("${PR_NUMBER}")"
+           [[ "${LATEST_COMMIT_MESSAGE}" = "$(date -u -d '6 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_6_MINUTES+=("${PR_NUMBER}")"
+           echo "2 minutes: ${PR_LIST_2_MINUTES[@]}"
+           echo "4 minutes: ${PR_LIST_4_MINUTES[@]}"
+           echo "6 minutes: ${PR_LIST_6_MINUTES[@]}"
          done
-         echo "2 minutes ${PR_LIST_2_MINUTES}"
-         echo "4 minutes ${PR_LIST_4_MINUTES}"
-         echo "6 minutes ${PR_LIST_6_MINUTES}"
+         echo "2 minutes: ${PR_LIST_2_MINUTES[@]}"
+         echo "4 minutes: ${PR_LIST_4_MINUTES[@]}"
+         echo "6 minutes: ${PR_LIST_6_MINUTES[@]}"
          for PR_NUMBER_1 in $PR_LIST_2_MINUTES; do
             COMMENT="Reminder**: This pull request will be closed in 4 minutes if there's no further activity. Please review and provide any necessary updates."
             curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_1/comments"
