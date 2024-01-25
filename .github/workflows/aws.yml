@@ -26,11 +26,11 @@ jobs:
          GITHUB_REPO="ecs-github-actions"
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
       
-         # to fetch open pull requests
-         PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&direction=asc")
-         echo "pr list is ${PR_LIST}"
+         # # to fetch open pull requests
+         # PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&direction=asc")
+         # echo "pr list is ${PR_LIST}"
 
-         API_URL="https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/9/commits"
+         API_URL="https://api.github.com/repos/Akshaya222/ecs-github-actions/pulls/8/commits"
 
          # Make the API request using curl
          COMMIT_DETAILS=$(curl -s -H "Accept: application/vnd.github.v3+json" "$API_URL")
