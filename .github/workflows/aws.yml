@@ -31,3 +31,4 @@ jobs:
          jq -c '.[]' <<<"${PR_LIST}" | while read -r element; do
            pull_req=${element}
            echo "pull request is , ${pull_req}"
+         done
