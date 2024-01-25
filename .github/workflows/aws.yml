@@ -25,6 +25,9 @@ jobs:
          GITHUB_OWNER="Akshaya222"
          GITHUB_REPO="ecs-github-actions"
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
+         PR_LIST_2_MINUTES=
+         PR_LIST_4_MINUTES=
+         PR_LIST_6_MINUTES=
          current_time=$(date +"%Y-%m-%d %H:%M:%S")
          echo "Current Time: $current_time"
          # to fetch open pull requests
