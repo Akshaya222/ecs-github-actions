@@ -41,7 +41,7 @@ jobs:
            echo "pull request number is ${PR_NUMBER} and ${LATEST_COMMIT_MESSAGE}"
            [[ "${LATEST_COMMIT_MESSAGE}" = "$(date -u -d '8 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_2_MINUTES+=("${PR_NUMBER}")
            [[ "${LATEST_COMMIT_MESSAGE}" = "$(date -u -d '4 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_4_MINUTES+=("${PR_NUMBER}")
-           [[ "${LATEST_COMMIT_MESSAGE}" = "$(date -u -d '12 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_6_MINUTES+=("${PR_NUMBER}")
+           [[ "${LATEST_COMMIT_MESSAGE}" > "$(date -u -d '13 minutes ago' +%Y-%m-%dT%H:%M)"* || "${LATEST_COMMIT_MESSAGE}" = "$(date -u -d '13 minutes ago' +%Y-%m-%dT%H:%M)"* ]] && PR_LIST_6_MINUTES+=("${PR_NUMBER}")
            echo "2 minutes: ${PR_LIST_2_MINUTES[@]}"
            echo "4 minutes: ${PR_LIST_4_MINUTES[@]}"
            echo "6 minutes: ${PR_LIST_6_MINUTES[@]}"
