@@ -25,7 +25,9 @@ jobs:
          GITHUB_OWNER="Akshaya222"
          GITHUB_REPO="ecs-github-actions"
          ACCESS_TOKEN=${{ steps.generate_token.outputs.token }}
-      
+         PR_LIST_2_MINUTES=
+         PR_LIST_4_MINUTES
+         PR_LIST_6_MINUTES
          # to fetch open pull requests
          PR_LIST=$(curl -s -H "Authorization: token $ACCESS_TOKEN" "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls?state=open&direction=asc")
            echo "$PR_LIST" | jq -c '.[]' | while read -r pull_req; do
@@ -41,17 +43,17 @@ jobs:
            echo "2 minutes ${PR_LIST_2_MINUTES}"
            echo "4 minutes ${PR_LIST_4_MINUTES}"
            echo "6 minutes ${PR_LIST_6_MINUTES}"
-           for PR_NUMBER_1 in $PR_LIST_2_MINUTES; do
-             COMMENT="Reminder**: This pull request will be closed in 4 minutes if there's no further activity. Please review and provide any necessary updates."
-             curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_1/comments"
-           done
-           for PR_NUMBER_2 in $PR_LIST_4_MINUTES; do
-             COMMENT="Reminder**: This pull request will be closed in 2 minutes if there's no further activity. Please review and provide any necessary updates."
-             curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_2/comments"
-           done
-           for PR_NUMBER_3 in $PR_LIST_6_MINUTES; do
-             COMMENT=" Closing**: closing this pr as it was inactive for more than 6 minutes. Feel free to reopen if needed."
-             curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_3/comments"
-             curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER_3"
-           done
+         done
+         for PR_NUMBER_1 in $PR_LIST_2_MINUTES; do
+            COMMENT="Reminder**: This pull request will be closed in 4 minutes if there's no further activity. Please review and provide any necessary updates."
+            curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_1/comments"
+         done
+         for PR_NUMBER_2 in $PR_LIST_4_MINUTES; do
+            COMMENT="Reminder**: This pull request will be closed in 2 minutes if there's no further activity. Please review and provide any necessary updates."
+            curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_2/comments"
+         done
+         for PR_NUMBER_3 in $PR_LIST_6_MINUTES; do
+            COMMENT=" Closing**: closing this pr as it was inactive for more than 6 minutes. Feel free to reopen if needed."
+            curl -s -H "Authorization: token $ACCESS_TOKEN" -X POST -d '{"body":"'"$COMMENT"'"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/issues/$PR_NUMBER_3/comments"
+            curl -s -H "Authorization: token $ACCESS_TOKEN" -X PATCH -d '{"state": "closed"}' "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/pulls/$PR_NUMBER_3"
          done
