@@ -31,7 +31,7 @@ jobs:
        with:
           repo-token: ${{ secrets.AWS_PAT }}
           stale-pr-message: 'This PR is stale because it has been open 5 days with no activity. update the pull request otherwise this will be closed in 1 day.'
-          days-before-pr-stale: 5
+          days-before-pr-stale: 0
           
      - name: stale and close the pr.
        uses: actions/stale@v9
